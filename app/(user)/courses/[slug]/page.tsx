@@ -136,7 +136,7 @@ export default async function CoursePage({ params }: CoursePageProps) {
               )}
               {course.instructors &&
                 course.instructors.map((instructor) => (
-                  <div>
+                  <div key={instructor._id}>
                     <div
                       className={`flex items-center gap-3 ${course.instructors && course.instructors.length > 1 ? "mb-4" : "mb-0"}`}
                     >
