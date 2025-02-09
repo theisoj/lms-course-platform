@@ -20,7 +20,7 @@ export async function checkCourseAccess(
   }
 
   const student = await getStudentByClerkId(clerkId);
-  if (!student?.data?._id) {
+  if (!student?._id) {
     return {
       isAuthorized: false,
       redirect: "/",
@@ -38,6 +38,6 @@ export async function checkCourseAccess(
 
   return {
     isAuthorized: true,
-    studentId: student.data._id,
+    studentId: student._id,
   };
 }
