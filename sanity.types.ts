@@ -156,6 +156,28 @@ export type BlockContent = Array<{
   _key: string;
 }>;
 
+export type Instructor = {
+  _id: string;
+  _type: "instructor";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  name?: string;
+  title?: string;
+  bio?: string;
+  photo?: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
+  };
+};
+
 export type Lesson = {
   _id: string;
   _type: "lesson";
@@ -237,33 +259,13 @@ export type Course = {
     _key: string;
     [internalGroqTypeReferenceTo]?: "module";
   }>;
-  instructor?: {
+  instructors?: Array<{
     _ref: string;
     _type: "reference";
     _weak?: boolean;
+    _key: string;
     [internalGroqTypeReferenceTo]?: "instructor";
-  };
-};
-
-export type Instructor = {
-  _id: string;
-  _type: "instructor";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  name?: string;
-  bio?: string;
-  photo?: {
-    asset?: {
-      _ref: string;
-      _type: "reference";
-      _weak?: boolean;
-      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-    };
-    hotspot?: SanityImageHotspot;
-    crop?: SanityImageCrop;
-    _type: "image";
-  };
+  }>;
 };
 
 export type Category = {
@@ -342,11 +344,11 @@ export type Slug = {
   source?: string;
 };
 
-export type AllSanitySchemaTypes = SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityFileAsset | Geopoint | LessonCompletion | Enrollment | Student | BlockContent | Lesson | Module | Course | Instructor | Category | SanityImageCrop | SanityImageHotspot | SanityImageAsset | SanityAssetSourceData | SanityImageMetadata | Slug;
+export type AllSanitySchemaTypes = SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityFileAsset | Geopoint | LessonCompletion | Enrollment | Student | BlockContent | Instructor | Lesson | Module | Course | Category | SanityImageCrop | SanityImageHotspot | SanityImageAsset | SanityAssetSourceData | SanityImageMetadata | Slug;
 export declare const internalGroqTypeReferenceTo: unique symbol;
 // Source: sanity/lib/courses/getCourseById.ts
 // Variable: getCourseByIdQuery
-// Query: *[_type == "course" && _id == $id][0] {      ...,  // Spread all course fields      "category": category->{...},  // Expand the category reference, including all its fields      "instructor": instructor->{...},  // Expand the instructor reference, including all its fields      "modules": modules[]-> {  // Expand the array of module references        ...,  // Include all module fields        "lessons": lessons[]-> {...}  // For each module, expand its array of lesson references      }    }
+// Query: *[_type == "course" && _id == $id][0] {      ...,  // Spread all course fields      "category": category->{...},  // Expand the category reference, including all its fields      "instructors": instructors[]->{...},  // Expand the instructor reference, including all its fields      "modules": modules[]-> {  // Expand the array of module references        ...,  // Include all module fields        "lessons": lessons[]-> {...}  // For each module, expand its array of lesson references      }    }
 export type GetCourseByIdQueryResult = {
   _id: string;
   _type: "course";
@@ -418,13 +420,14 @@ export type GetCourseByIdQueryResult = {
       }>;
     }> | null;
   }> | null;
-  instructor: {
+  instructors: Array<{
     _id: string;
     _type: "instructor";
     _createdAt: string;
     _updatedAt: string;
     _rev: string;
     name?: string;
+    title?: string;
     bio?: string;
     photo?: {
       asset?: {
@@ -437,12 +440,12 @@ export type GetCourseByIdQueryResult = {
       crop?: SanityImageCrop;
       _type: "image";
     };
-  } | null;
+  }> | null;
 } | null;
 
 // Source: sanity/lib/courses/getCourseBySlug.ts
 // Variable: getCourseBySlugQuery
-// Query: *[_type == "course" && slug.current == $slug][0] {      ...,      "category": category->{...},      "instructor": instructor->{...},      "modules": modules[]-> {        ...,        "lessons": lessons[]-> {...}      }    }
+// Query: *[_type == "course" && slug.current == $slug][0] {      ...,      "category": category->{...},      "instructors": instructors[]->{...},      "modules": modules[]-> {        ...,        "lessons": lessons[]-> {...}      }    }
 export type GetCourseBySlugQueryResult = {
   _id: string;
   _type: "course";
@@ -514,13 +517,14 @@ export type GetCourseBySlugQueryResult = {
       }>;
     }> | null;
   }> | null;
-  instructor: {
+  instructors: Array<{
     _id: string;
     _type: "instructor";
     _createdAt: string;
     _updatedAt: string;
     _rev: string;
     name?: string;
+    title?: string;
     bio?: string;
     photo?: {
       asset?: {
@@ -533,12 +537,12 @@ export type GetCourseBySlugQueryResult = {
       crop?: SanityImageCrop;
       _type: "image";
     };
-  } | null;
+  }> | null;
 } | null;
 
 // Source: sanity/lib/courses/getCourses.ts
 // Variable: getCoursesQuery
-// Query: *[_type == "course"] {    ...,    "slug": slug.current,    "category": category->{...},    "instructor": instructor->{...}  }
+// Query: *[_type == "course"] {    ...,    "slug": slug.current,    "category": category->{...},    "instructors": instructors[]->{...}  }
 export type GetCoursesQueryResult = Array<{
   _id: string;
   _type: "course";
@@ -579,13 +583,14 @@ export type GetCoursesQueryResult = Array<{
     _key: string;
     [internalGroqTypeReferenceTo]?: "module";
   }>;
-  instructor: {
+  instructors: Array<{
     _id: string;
     _type: "instructor";
     _createdAt: string;
     _updatedAt: string;
     _rev: string;
     name?: string;
+    title?: string;
     bio?: string;
     photo?: {
       asset?: {
@@ -598,12 +603,12 @@ export type GetCoursesQueryResult = Array<{
       crop?: SanityImageCrop;
       _type: "image";
     };
-  } | null;
+  }> | null;
 }>;
 
 // Source: sanity/lib/courses/searchCourses.ts
 // Variable: searchQuery
-// Query: *[_type == "course" && (    title match $term + "*" ||    description match $term + "*" ||    category->name match $term + "*"  )] {    ...,    "slug": slug.current,    "category": category->{...},    "instructor": instructor->{...}  }
+// Query: *[_type == "course" && (    title match $term + "*" ||    description match $term + "*" ||    category->name match $term + "*"  )] {    ...,    "slug": slug.current,    "category": category->{...},    "instructors": instructors[]->{...}  }
 export type SearchQueryResult = Array<{
   _id: string;
   _type: "course";
@@ -644,13 +649,14 @@ export type SearchQueryResult = Array<{
     _key: string;
     [internalGroqTypeReferenceTo]?: "module";
   }>;
-  instructor: {
+  instructors: Array<{
     _id: string;
     _type: "instructor";
     _createdAt: string;
     _updatedAt: string;
     _rev: string;
     name?: string;
+    title?: string;
     bio?: string;
     photo?: {
       asset?: {
@@ -663,7 +669,7 @@ export type SearchQueryResult = Array<{
       crop?: SanityImageCrop;
       _type: "image";
     };
-  } | null;
+  }> | null;
 }>;
 
 // Source: sanity/lib/lessons/getCourseProgress.ts
@@ -800,12 +806,13 @@ export type ProgressQueryResult = {
         }>;
       }> | null;
     }> | null;
-    instructor?: {
+    instructors?: Array<{
       _ref: string;
       _type: "reference";
       _weak?: boolean;
+      _key: string;
       [internalGroqTypeReferenceTo]?: "instructor";
-    };
+    }>;
   } | null;
 };
 
@@ -978,12 +985,13 @@ export type GetCompletionsQueryResult = {
         }>;
       }> | null;
     }> | null;
-    instructor?: {
+    instructors?: Array<{
       _ref: string;
       _type: "reference";
       _weak?: boolean;
+      _key: string;
       [internalGroqTypeReferenceTo]?: "instructor";
-    };
+    }>;
   } | null;
 };
 
@@ -1025,7 +1033,7 @@ export type CompletionStatusQueryResult = {
 
 // Source: sanity/lib/student/getEnrolledCourses.ts
 // Variable: getEnrolledCoursesQuery
-// Query: *[_type == "student" && clerkId == $clerkId][0] {    "enrolledCourses": *[_type == "enrollment" && student._ref == ^._id] {      ...,      "course": course-> {        ...,        "slug": slug.current,        "category": category->{...},        "instructor": instructor->{...}      }    }  }
+// Query: *[_type == "student" && clerkId == $clerkId][0] {    "enrolledCourses": *[_type == "enrollment" && student._ref == ^._id] {      ...,      "course": course-> {        ...,        "slug": slug.current,        "category": category->{...},        "instructors": instructors[]->{...}      }    }  }
 export type GetEnrolledCoursesQueryResult = {
   enrolledCourses: Array<{
     _id: string;
@@ -1079,13 +1087,14 @@ export type GetEnrolledCoursesQueryResult = {
         _key: string;
         [internalGroqTypeReferenceTo]?: "module";
       }>;
-      instructor: {
+      instructors: Array<{
         _id: string;
         _type: "instructor";
         _createdAt: string;
         _updatedAt: string;
         _rev: string;
         name?: string;
+        title?: string;
         bio?: string;
         photo?: {
           asset?: {
@@ -1098,7 +1107,7 @@ export type GetEnrolledCoursesQueryResult = {
           crop?: SanityImageCrop;
           _type: "image";
         };
-      } | null;
+      }> | null;
     } | null;
     amount?: number;
     paymentId?: string;
@@ -1155,14 +1164,14 @@ export type EnrollmentQueryResult = {
 import "@sanity/client";
 declare module "@sanity/client" {
   interface SanityQueries {
-    "*[_type == \"course\" && _id == $id][0] {\n      ...,  // Spread all course fields\n      \"category\": category->{...},  // Expand the category reference, including all its fields\n      \"instructor\": instructor->{...},  // Expand the instructor reference, including all its fields\n      \"modules\": modules[]-> {  // Expand the array of module references\n        ...,  // Include all module fields\n        \"lessons\": lessons[]-> {...}  // For each module, expand its array of lesson references\n      }\n    }": GetCourseByIdQueryResult;
-    "*[_type == \"course\" && slug.current == $slug][0] {\n      ...,\n      \"category\": category->{...},\n      \"instructor\": instructor->{...},\n      \"modules\": modules[]-> {\n        ...,\n        \"lessons\": lessons[]-> {...}\n      }\n    }": GetCourseBySlugQueryResult;
-    "*[_type == \"course\"] {\n    ...,\n    \"slug\": slug.current,\n    \"category\": category->{...},\n    \"instructor\": instructor->{...}\n  }": GetCoursesQueryResult;
-    "*[_type == \"course\" && (\n    title match $term + \"*\" ||\n    description match $term + \"*\" ||\n    category->name match $term + \"*\"\n  )] {\n    ...,\n    \"slug\": slug.current,\n    \"category\": category->{...},\n    \"instructor\": instructor->{...}\n  }": SearchQueryResult;
+    "*[_type == \"course\" && _id == $id][0] {\n      ...,  // Spread all course fields\n      \"category\": category->{...},  // Expand the category reference, including all its fields\n      \"instructors\": instructors[]->{...},  // Expand the instructor reference, including all its fields\n      \"modules\": modules[]-> {  // Expand the array of module references\n        ...,  // Include all module fields\n        \"lessons\": lessons[]-> {...}  // For each module, expand its array of lesson references\n      }\n    }": GetCourseByIdQueryResult;
+    "*[_type == \"course\" && slug.current == $slug][0] {\n      ...,\n      \"category\": category->{...},\n      \"instructors\": instructors[]->{...},\n      \"modules\": modules[]-> {\n        ...,\n        \"lessons\": lessons[]-> {...}\n      }\n    }": GetCourseBySlugQueryResult;
+    "*[_type == \"course\"] {\n    ...,\n    \"slug\": slug.current,\n    \"category\": category->{...},\n    \"instructors\": instructors[]->{...}\n  }": GetCoursesQueryResult;
+    "*[_type == \"course\" && (\n    title match $term + \"*\" ||\n    description match $term + \"*\" ||\n    category->name match $term + \"*\"\n  )] {\n    ...,\n    \"slug\": slug.current,\n    \"category\": category->{...},\n    \"instructors\": instructors[]->{...}\n  }": SearchQueryResult;
     "{\n    \"completedLessons\": *[_type == \"lessonCompletion\" && student._ref == $studentId && course._ref == $courseId] {\n      ...,\n      \"lesson\": lesson->{...},\n      \"module\": module->{...}\n    },\n    \"course\": *[_type == \"course\" && _id == $courseId][0] {\n      ...,\n      \"modules\": modules[]-> {\n        ...,\n        \"lessons\": lessons[]-> {...}\n      }\n    }\n  }": ProgressQueryResult | GetCompletionsQueryResult;
     "*[_type == \"lesson\" && _id == $id][0] {\n    ...,\n    \"module\": module->{\n      ...,\n      \"course\": course->{...}\n    }\n  }": GetLessonByIdQueryResult;
     "*[_type == \"lessonCompletion\" && student._ref == $studentId && lesson._ref == $lessonId][0] {\n    ...\n  }": CompletionStatusQueryResult;
-    "*[_type == \"student\" && clerkId == $clerkId][0] {\n    \"enrolledCourses\": *[_type == \"enrollment\" && student._ref == ^._id] {\n      ...,\n      \"course\": course-> {\n        ...,\n        \"slug\": slug.current,\n        \"category\": category->{...},\n        \"instructor\": instructor->{...}\n      }\n    }\n  }": GetEnrolledCoursesQueryResult;
+    "*[_type == \"student\" && clerkId == $clerkId][0] {\n    \"enrolledCourses\": *[_type == \"enrollment\" && student._ref == ^._id] {\n      ...,\n      \"course\": course-> {\n        ...,\n        \"slug\": slug.current,\n        \"category\": category->{...},\n        \"instructors\": instructors[]->{...}\n      }\n    }\n  }": GetEnrolledCoursesQueryResult;
     "*[_type == \"student\" && clerkId == $clerkId][0]": GetStudentByClerkIdQueryResult;
     "*[_type == \"student\" && clerkId == $clerkId][0]._id": StudentQueryResult;
     "*[_type == \"enrollment\" && student._ref == $studentId && course._ref == $courseId][0]": EnrollmentQueryResult;

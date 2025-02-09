@@ -10,7 +10,7 @@ export async function searchCourses(term: string) {
     ...,
     "slug": slug.current,
     "category": category->{...},
-    "instructor": instructor->{...}
+    "instructors": instructors[]->{...}
   }`);
 
   const result = await sanityFetch({

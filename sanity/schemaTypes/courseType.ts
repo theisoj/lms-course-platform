@@ -52,10 +52,10 @@ export const courseType = defineType({
       of: [{ type: "reference", to: { type: "module" } }],
     }),
     defineField({
-      name: "instructor",
-      title: "Ohjaaja",
-      type: "reference",
-      to: { type: "instructor" },
+      name: "instructors",
+      title: "Ohjaajat",
+      type: "array",
+      of: [{ type: "reference", to: { "type": "instructor" } }]
     }),
   ],
 });

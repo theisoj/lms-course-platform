@@ -12,6 +12,13 @@ export const instructorType = defineType({
       validation: (rule) => rule.required(),
     }),
     defineField({
+      name: "title",
+      title: "Titteli",
+      type: "text",
+      rows: 1,
+      validation: (rule) => rule.required()
+    }),
+    defineField({
       name: "bio",
       title: "Esittely",
       type: "text",

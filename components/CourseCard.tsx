@@ -66,25 +66,21 @@ export function CourseCard({ course, progress, href }: CourseCardProps) {
             {course.description}
           </p>
           <div className="space-y-4 mt-auto">
-            {course.instructor && (
+            {course.instructors && (
               <div className="flex items-center justify-between">
                 <div className="flex items-center">
-                  {course.instructor.photo ? (
+                  {course.instructors[0].photo && (
                     <div className="relative h-8 w-8 mr-2">
                       <Image
-                        src={urlFor(course.instructor.photo).url() || ""}
-                        alt={course.instructor.name || "Instructor"}
+                        src={urlFor(course.instructors[0].photo).url() || ""}
+                        alt={course.instructors[0].name || "Instructor"}
                         fill
                         className="rounded-full object-cover"
                       />
                     </div>
-                  ) : (
-                    <div className="h-8 w-8 mr-2 rounded-full bg-muted flex items-center justify-center">
-                      <Loader size="sm" />
-                    </div>
                   )}
                   <span className="text-sm text-muted-foreground">
-                    Tekijä: {course.instructor.name}
+                    Tekijä: {course.instructors[0].name}
                   </span>
                 </div>
                 <BookOpen className="h-4 w-4 text-muted-foreground" />

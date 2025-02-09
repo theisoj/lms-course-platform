@@ -129,36 +129,39 @@ export default async function CoursePage({ params }: CoursePageProps) {
           {/* Sidebar */}
           <div>
             <div className="bg-card rounded-lg p-6 sticky top-4 border border-border">
-              <h2 className="text-xl font-bold mb-4">Kouluttaja</h2>
-              {course.instructor && (
-                <div>
-                  <div className="flex items-center gap-3 mb-4">
-                    {course.instructor.photo && (
-                      <div className="relative h-12 w-12">
-                        <Image
-                          src={urlFor(course.instructor.photo).url() || ""}
-                          alt={course.instructor.name || "Course Instructor"}
-                          fill
-                          className="rounded-full object-cover"
-                        />
-                      </div>
-                    )}
-                    <div>
-                      <div className="font-medium">
-                        {course.instructor.name}
-                      </div>
-                      <div className="text-sm text-muted-foreground">
-                        Kouluttaja
+              {course.instructors && (
+                <h2 className="text-xl font-bold mb-4">
+                  {course.instructors.length} opettaja{course.instructors.length > 1 ? "a" : ""}
+                </h2>
+              )}
+              {course.instructors &&
+                course.instructors.map((instructor) => (
+                  <div>
+                    <div
+                      className={`flex items-center gap-3 ${course.instructors && course.instructors.length > 1 ? "mb-4" : "mb-0"}`}
+                    >
+                      {instructor.photo && (
+                        <div className="relative h-12 w-12">
+                          <Image
+                            src={urlFor(instructor.photo).url() || ""}
+                            alt={instructor.name || "Course Instructor"}
+                            fill
+                            className="rounded-full object-cover"
+                          />
+                        </div>
+                      )}
+                      <div>
+                        <div className="font-medium">{instructor.name}</div>
+                        <div className="text-sm text-muted-foreground">
+                          {instructor.title}
+                        </div>
                       </div>
                     </div>
+                    {instructor.bio && (
+                      <p className="text-muted-foreground">{instructor.bio}</p>
+                    )}
                   </div>
-                  {course.instructor.bio && (
-                    <p className="text-muted-foreground">
-                      {course.instructor.bio}
-                    </p>
-                  )}
-                </div>
-              )}
+                ))}
             </div>
           </div>
         </div>

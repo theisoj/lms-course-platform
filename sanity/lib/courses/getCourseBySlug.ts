@@ -6,7 +6,7 @@ async function getCourseBySlug(slug: string) {
     defineQuery(`*[_type == "course" && slug.current == $slug][0] {
       ...,
       "category": category->{...},
-      "instructor": instructor->{...},
+      "instructors": instructors[]->{...},
       "modules": modules[]-> {
         ...,
         "lessons": lessons[]-> {...}
