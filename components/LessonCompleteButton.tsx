@@ -63,7 +63,7 @@ export function LessonCompleteButton({
   const isLoading = isCompleted === null || isPendingTransition
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 p-4 m-4 sm:my-4 sm:mx-16 rounded-xl bg-background/80 backdrop-blur-sm border z-50">
+    <div className="absolute bottom-0 left-0 right-0 p-4 sm:my-4 sm:mx-16 rounded-none sm:rounded-xl bg-background/80 backdrop-blur-sm border z-50">
       <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
         <div className="flex-1 w-full text-center sm:text-start">
           <p className="text-sm font-medium">
@@ -91,23 +91,23 @@ export function LessonCompleteButton({
         >
           {isLoading ? (
             <>
-              <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+              <Loader2 className="h-4 w-4 animate-spin" />
               Päivitetään...
             </>
           ) : isPending ? (
             <>
-              <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+              <Loader2 className="h-4 w-4 animate-spin" />
               {isCompleted ? "Keskeytetään..." : "Valmistetaan..."}
             </>
           ) : isCompleted ? (
             <>
-              <XCircle className="h-4 w-4 mr-2" />
+              <XCircle className="h-4 w-4" />
               Merkitse keskeneräiseksi
             </>
           ) : (
             <>
-              <CheckCircle className="h-4 w-4 mr-2" />
-              Merkitse valmiiksi
+              <CheckCircle className="h-4 w-4" />
+              Valmis
             </>
           )}
         </Button>

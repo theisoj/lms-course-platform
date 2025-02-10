@@ -10,7 +10,7 @@ interface VideoPlayerProps {
 
 export const VideoPlayer = ({ url }: VideoPlayerProps) => {
   return (
-    <div className="relative aspect-video">
+    <div className="relative aspect-video rounded-xl overflow-hidden">
       <ReactPlayer
         url={url}
         width="100%"

@@ -25,16 +25,20 @@ export const generateMetadata = async ({
 
   // Jos kurssia ei löydy, ohjataan takaisin dashboardiin
   if (!course) return redirect(`/dashboard/courses/${courseId}`)
+  if (!lesson) return redirect(`/dashboard/courses/${courseId}`)
 
   // Haetaan oppitunti ensimmäisestä moduulista ja kurssista
-  const title = `${lesson?.title} - ${course.title}` // Otsikko päivitetään oppitunnin mukaan
-  const description = `Liity kurssille ${lesson?.title} nyt!` // Kuvaukseen lisätään oppitunnin nimi
+  const title = `${lesson.title} - ${course.title}` // Otsikko päivitetään oppitunnin mukaan
+  const description = `Liity kurssille ${lesson.title} nyt!` // Kuvaukseen lisätään oppitunnin nimi
 
   // URL ja Open Graph -kuva
   const url = `https://kurssit.jesunmaailma.fi/courses/${course.slug}`
-  const image = `https://kurssit.jesunmaailma.fi/api/og-image?course=${encodeURIComponent(lesson?.title!)}&instructors=${encodeURIComponent(
-    course.instructors?.map((i) => i.name).join(", ")!
-  )}`
+  const image =
+    course && course.instructors
+      ? `https://kurssit.jesunmaailma.fi/api/og-image?course=${encodeURIComponent(lesson.title as string)}&instructors=${encodeURIComponent(
+          course.instructors.map((i) => i.name).join(", ")
+        )}`
+      : "-"
 
   // Metadata palautetaan
   return {
@@ -82,7 +86,7 @@ export default async function LessonPage({ params }: LessonPageProps) {
   return (
     <div className="h-full flex flex-col overflow-hidden">
       <div className="flex-1 overflow-y-auto">
-        <div className="max-w-4xl mx-auto pt-12 pb-20 px-4">
+        <div className="max-w-4xl mx-auto pt-12 pb-20 relative">
           <h1 className="text-2xl font-bold mb-4">{lesson.title}</h1>
 
           {lesson.description && (

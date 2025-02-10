@@ -9,7 +9,7 @@ import DarkModeToggle from "./DarkModeToggle"
 
 export default function Header() {
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-sm border-b border-border">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-background border-b border-border">
       <div className="container mx-auto px-4">
         <div className="flex h-16 items-center justify-between gap-4">
           <div className="flex items-center gap-4">
@@ -27,9 +27,9 @@ export default function Header() {
                 className="size-28 object-contain hidden dark:block"
               />
             </Link>
-
-            <SearchInput />
           </div>
+
+          <SearchInput />
 
           <div className="flex items-center space-x-2 md:space-x-4">
             <SignedIn>
@@ -66,7 +66,10 @@ export default function Header() {
 
               {/* Pienellä näytöllä vain ikoni */}
               <SignInButton mode="modal">
-                <button type="button" className="sm:hidden p-2 rounded-full hover:bg-secondary transition">
+                <button
+                  type="button"
+                  className="sm:hidden p-2 rounded-full hover:bg-secondary transition"
+                >
                   <LogIn className="size-5 text-muted-foreground" />
                 </button>
               </SignInButton>

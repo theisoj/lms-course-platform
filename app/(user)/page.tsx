@@ -1,22 +1,26 @@
-import Hero from "@/components/Hero";
-import { CourseCard } from "@/components/CourseCard";
-import { getCourses } from "@/sanity/lib/courses/getCourses";
-import { Metadata } from "next";
+import Hero from "@/components/Hero"
+import { CourseCard } from "@/components/CourseCard"
+import { getCourses } from "@/sanity/lib/courses/getCourses"
+import { Metadata } from "next"
 
-export const dynamic = "force-static";
-export const revalidate = 3600; // revalidate at most every hour
+export const dynamic = "force-static"
+export const revalidate = 3600 // revalidate at most every hour
 
 export const generateMetadata = (): Metadata => {
   const title = "Etusivu"
 
   return {
     title,
-    icons: { icon: "https://images.jesunmaailma.fi/uploads/icons/JM_kurssit_icon_color.png", apple: "https://images.jesunmaailma.fi/uploads/icons/JM_kurssit_icon_color.png" }
+    icons: {
+      icon: "https://images.jesunmaailma.fi/uploads/icons/JM_kurssit_icon_color.png",
+      apple:
+        "https://images.jesunmaailma.fi/uploads/icons/JM_kurssit_icon_color.png",
+    },
   }
 }
 
 export default async function Home() {
-  const courses = await getCourses();
+  const courses = await getCourses()
 
   return (
     <div className="min-h-screen bg-background">
@@ -27,7 +31,7 @@ export default async function Home() {
         <div className="flex items-center gap-4 py-8">
           <div className="h-px flex-1 bg-gradient-to-r from-border/0 via-border to-border/0" />
           <span className="text-sm font-medium text-muted-foreground">
-          Suositellut kurssit
+            Suositellut kurssit
           </span>
           <div className="h-px flex-1 bg-gradient-to-r from-border/0 via-border to-border/0" />
         </div>
@@ -43,5 +47,5 @@ export default async function Home() {
         </div>
       </div>
     </div>
-  );
+  )
 }

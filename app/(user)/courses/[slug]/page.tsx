@@ -20,7 +20,7 @@ type Props = {
 }
 
 export const generateMetadata = async ({
-  params
+  params,
 }: Props): Promise<Metadata> => {
   const { slug } = await params
 
@@ -31,14 +31,21 @@ export const generateMetadata = async ({
   const title = `${course.title} - JM Kurssit`
   const description = `Liity kurssille ${course.title} nyt!`
   const url = `https://kurssit.jesunmaailma.fi/courses/${course.slug}`
-  const image = `https://kurssit.jesunmaailma.fi/api/og-image?course=${encodeURIComponent(course?.title!)}&instructors=${encodeURIComponent(
-    course?.instructors?.map((i) => i.name).join(", ")!
-  )}`
+  const image =
+    course && course.instructors
+      ? `https://kurssit.jesunmaailma.fi/api/og-image?course=${encodeURIComponent(course.title as string)}&instructors=${encodeURIComponent(
+          course.instructors.map((i) => i.name).join(", ")
+        )}`
+      : "-"
 
   return {
     title,
     description,
-    icons: { icon: "https://images.jesunmaailma.fi/uploads/icons/JM_kurssit_icon_color.png", apple: "https://images.jesunmaailma.fi/uploads/icons/JM_kurssit_icon_color.png" },
+    icons: {
+      icon: "https://images.jesunmaailma.fi/uploads/icons/JM_kurssit_icon_color.png",
+      apple:
+        "https://images.jesunmaailma.fi/uploads/icons/JM_kurssit_icon_color.png",
+    },
     openGraph: {
       title,
       description,
@@ -49,7 +56,10 @@ export const generateMetadata = async ({
           url: image!,
           width: 1200,
           height: 630,
-          alt: `${course.title} - ${course.instructors && course.instructors.length > 0 ? course.instructors.map((i) => i.name).join(", ") : course.instructors?.[0]?.name}`,
+          alt:
+            course && course.instructors
+              ? `${course.title} - ${course.instructors.map((i) => i.name).join(", ")}`
+              : "-",
         },
       ],
       type: "website",
@@ -82,7 +92,7 @@ export default async function CoursePage({ params }: CoursePageProps) {
   return (
     <div className="min-h-screen bg-background">
       {/* Hero Section */}
-      <div className="relative h-[60vh] w-full">
+      <div className="relative h-screen w-full">
         {course.image && (
           <Image
             src={urlFor(course.image).url() || ""}
@@ -112,13 +122,13 @@ export default async function CoursePage({ params }: CoursePageProps) {
               <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
                 {course.title}
               </h1>
-              <p className="text-lg text-white/90 max-w-2xl">
+              <p className="text-lg text-white/90 max-w-2xl whitespace-pre-wrap">
                 {course.description}
               </p>
             </div>
-            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6 md:min-w-[300px]">
+            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6 md:min-w-[300px] flex flex-col items-center md:items-start gap-4">
               {"price" in course && typeof course.price === "number" && (
-                <div className="text-3xl font-bold text-white mb-4">
+                <div className="text-3xl font-bold text-white">
                   {course.price === 0
                     ? "Ilmainen"
                     : `${course.price.toLocaleString("fi", {
@@ -140,38 +150,51 @@ export default async function CoursePage({ params }: CoursePageProps) {
             <div className="bg-card rounded-lg p-6 mb-8 border border-border">
               <h2 className="text-2xl font-bold mb-4">Kurssin sisältö</h2>
               <div className="space-y-4">
-                {course.modules?.map((module, index) => (
-                  <div
-                    key={module._id}
-                    className="border border-border rounded-lg"
-                  >
-                    <div className="p-4 border-b border-border">
-                      <h3 className="font-medium">
-                        Moduuli {index + 1}: {module.title}
-                      </h3>
-                    </div>
-                    <div className="divide-y divide-border">
-                      {module.lessons?.map((lesson, lessonIndex) => (
-                        <div
-                          key={lesson._id}
-                          className="p-4 hover:bg-muted/50 transition-colors"
-                        >
-                          <div className="flex items-center gap-4">
-                            <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center font-medium">
-                              {lessonIndex + 1}
-                            </div>
-                            <div className="flex items-center gap-3 text-foreground">
-                              <BookOpen className="h-4 w-4 text-muted-foreground" />
-                              <span className="font-medium">
-                                {lesson.title}
-                              </span>
-                            </div>
+                {course.modules === null && (
+                  <h3 className="font-medium">Ei moduuleita.</h3>
+                )}
+                {course.modules &&
+                  course.modules.map((module, index) => (
+                    <div
+                      key={module._id}
+                      className="border border-border rounded-lg"
+                    >
+                      <div className="p-4 border-b border-border">
+                        <h3 className="font-medium">
+                          Moduuli {index + 1}: {module.title}
+                        </h3>
+                      </div>
+                      <div className="divide-y divide-border">
+                        {module.lessons === null ? (
+                          <div className="p-4">
+                            <h3 className="font-medium text-sm">
+                              Ei oppitunteja.
+                            </h3>
                           </div>
-                        </div>
-                      ))}
+                        ) : (
+                          module.lessons &&
+                          module.lessons.map((lesson, lessonIndex) => (
+                            <div
+                              key={lesson._id}
+                              className="p-4 hover:bg-muted/50 transition-colors"
+                            >
+                              <div className="flex items-center gap-4">
+                                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center font-medium">
+                                  {lessonIndex + 1}
+                                </div>
+                                <div className="flex items-center gap-3 text-foreground">
+                                  <BookOpen className="h-4 w-4 text-muted-foreground" />
+                                  <span className="font-medium">
+                                    {lesson.title}
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                          ))
+                        )}
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
               </div>
             </div>
           </div>
@@ -181,7 +204,8 @@ export default async function CoursePage({ params }: CoursePageProps) {
             <div className="bg-card rounded-lg p-6 sticky top-4 border border-border">
               {course.instructors && (
                 <h2 className="text-xl font-bold mb-4">
-                  {course.instructors.length} opettaja{course.instructors.length > 1 ? "a" : ""}
+                  {course.instructors.length} opettaja
+                  {course.instructors.length > 1 ? "a" : ""}
                 </h2>
               )}
               {course.instructors &&
