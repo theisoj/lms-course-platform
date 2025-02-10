@@ -16,12 +16,16 @@ export default function Header() {
             <Link
               href="/"
               prefetch={false}
-              className="flex items-center space-x-2 hover:opacity-90 transition-opacity"
+              className="hover:opacity-90 transition-opacity"
             >
-              <BookOpen className="h-6 w-6 text-primary" />
-              <span className="text-xl font-bold bg-gradient-to-r from-primary/90 to-primary bg-clip-text text-transparent">
-                Courselly
-              </span>
+              <img
+                src="/kurssit_logo.svg"
+                className="size-28 object-contain dark:hidden"
+              />
+              <img
+                src="/kurssit_logo_white.svg"
+                className="size-28 object-contain hidden dark:block"
+              />
             </Link>
 
             <SearchInput />
@@ -42,7 +46,7 @@ export default function Header() {
             </SignedIn>
 
             <DarkModeToggle />
-            
+
             <SignedIn>
               <UserButton />
             </SignedIn>
