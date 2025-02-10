@@ -1,7 +1,7 @@
 "use client"
 
 import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs"
-import { BookMarkedIcon, BookOpen } from "lucide-react"
+import { BookMarkedIcon, BookOpen, LogIn } from "lucide-react"
 import Link from "next/link"
 import { SearchInput } from "./SearchInput"
 import { Button } from "./ui/button"
@@ -52,10 +52,23 @@ export default function Header() {
             </SignedIn>
 
             <SignedOut>
+              {/* Isolla näytöllä normaali nappi */}
               <SignInButton mode="modal">
-                <Button variant="outline" size="default">
-                  Kirjaudu sisään
+                <Button
+                  variant="outline"
+                  size="default"
+                  className="hidden sm:flex items-center gap-2"
+                >
+                  <LogIn className="size-5" />
+                  Kirjaudu
                 </Button>
+              </SignInButton>
+
+              {/* Pienellä näytöllä vain ikoni */}
+              <SignInButton mode="modal">
+                <button type="button" className="sm:hidden p-2 rounded-full hover:bg-secondary transition">
+                  <LogIn className="size-5 text-muted-foreground" />
+                </button>
               </SignInButton>
             </SignedOut>
           </div>

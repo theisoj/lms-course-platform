@@ -240,7 +240,7 @@ export function Sidebar({ course, completedLessons = [] }: SidebarProps) {
               </Button>
             </TooltipTrigger>
             <TooltipContent side="right">
-              <p>Vaihda sivupalkki</p>
+              <p>Avaa/sulje sivupalkki</p>
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>

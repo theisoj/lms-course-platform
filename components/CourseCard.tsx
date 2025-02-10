@@ -48,7 +48,7 @@ export function CourseCard({ course, progress, href }: CourseCardProps) {
               {course.category?.name || "Ei kategorisoitu"}
             </span>
             {"price" in course && typeof course.price === "number" && (
-              <span className="text-white font-bold px-3 py-1 bg-black/50 dark:bg-white/20 rounded-full backdrop-blur-sm">
+              <span className="text-white font-medium text-sm px-3 py-1 bg-black/50 dark:bg-white/20 rounded-full backdrop-blur-sm">
                 {course.price === 0
                   ? "Ilmainen"
                   : `${course.price.toLocaleString("fi", {
