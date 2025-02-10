@@ -5,6 +5,20 @@ import Link from "next/link"
 import { GraduationCap } from "lucide-react"
 import { getCourseProgress } from "@/sanity/lib/lessons/getCourseProgress"
 import { CourseCard } from "@/components/CourseCard"
+import { Metadata } from "next"
+
+export const generateMetadata = (): Metadata => {
+  const title = "Minun kurssit"
+
+  return {
+    title,
+    icons: {
+      icon: "https://images.jesunmaailma.fi/uploads/icons/JM_kurssit_icon_color.png",
+      apple:
+        "https://images.jesunmaailma.fi/uploads/icons/JM_kurssit_icon_color.png",
+    },
+  }
+}
 
 export default async function MyCoursesPage() {
   const user = await currentUser()

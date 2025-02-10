@@ -348,7 +348,7 @@ export type AllSanitySchemaTypes = SanityImagePaletteSwatch | SanityImagePalette
 export declare const internalGroqTypeReferenceTo: unique symbol;
 // Source: sanity/lib/courses/getCourseById.ts
 // Variable: getCourseByIdQuery
-// Query: *[_type == "course" && _id == $id][0] {      ...,  // Spread all course fields      "category": category->{...},  // Expand the category reference, including all its fields      "instructors": instructors[]->{...},  // Expand the instructor reference, including all its fields      "modules": modules[]-> {  // Expand the array of module references        ...,  // Include all module fields        "lessons": lessons[]-> {...}  // For each module, expand its array of lesson references      }    }
+// Query: *[_type == "course" && _id == $id][0] {      ...,  // Spread all course fields      "category": category->{...},  // Expand the category reference, including all its fields      "instructors": instructors[]->{...},  // Expand the instructors reference, including all its fields      "modules": modules[]-> {  // Expand the array of module references        ...,  // Include all module fields        "lessons": lessons[]-> {...}  // For each module, expand its array of lesson references      }    }
 export type GetCourseByIdQueryResult = {
   _id: string;
   _type: "course";
@@ -1164,7 +1164,7 @@ export type EnrollmentQueryResult = {
 import "@sanity/client";
 declare module "@sanity/client" {
   interface SanityQueries {
-    "*[_type == \"course\" && _id == $id][0] {\n      ...,  // Spread all course fields\n      \"category\": category->{...},  // Expand the category reference, including all its fields\n      \"instructors\": instructors[]->{...},  // Expand the instructor reference, including all its fields\n      \"modules\": modules[]-> {  // Expand the array of module references\n        ...,  // Include all module fields\n        \"lessons\": lessons[]-> {...}  // For each module, expand its array of lesson references\n      }\n    }": GetCourseByIdQueryResult;
+    "*[_type == \"course\" && _id == $id][0] {\n      ...,  // Spread all course fields\n      \"category\": category->{...},  // Expand the category reference, including all its fields\n      \"instructors\": instructors[]->{...},  // Expand the instructors reference, including all its fields\n      \"modules\": modules[]-> {  // Expand the array of module references\n        ...,  // Include all module fields\n        \"lessons\": lessons[]-> {...}  // For each module, expand its array of lesson references\n      }\n    }": GetCourseByIdQueryResult;
     "*[_type == \"course\" && slug.current == $slug][0] {\n      ...,\n      \"category\": category->{...},\n      \"instructors\": instructors[]->{...},\n      \"modules\": modules[]-> {\n        ...,\n        \"lessons\": lessons[]-> {...}\n      }\n    }": GetCourseBySlugQueryResult;
     "*[_type == \"course\"] {\n    ...,\n    \"slug\": slug.current,\n    \"category\": category->{...},\n    \"instructors\": instructors[]->{...}\n  }": GetCoursesQueryResult;
     "*[_type == \"course\" && (\n    title match $term + \"*\" ||\n    description match $term + \"*\" ||\n    category->name match $term + \"*\"\n  )] {\n    ...,\n    \"slug\": slug.current,\n    \"category\": category->{...},\n    \"instructors\": instructors[]->{...}\n  }": SearchQueryResult;

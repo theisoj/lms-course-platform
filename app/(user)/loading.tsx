@@ -1,5 +1,15 @@
 import { Loader } from "@/components/ui/loader";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Metadata } from "next";
+
+export const generateMetadata = (): Metadata => {
+  const title = "Ladataan..."
+
+  return {
+    title,
+    icons: { icon: "https://images.jesunmaailma.fi/uploads/icons/JM_kurssit_icon_color.png", apple: "https://images.jesunmaailma.fi/uploads/icons/JM_kurssit_icon_color.png" }
+  }
+}
 
 function Loading() {
   return (

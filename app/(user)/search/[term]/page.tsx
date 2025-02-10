@@ -1,11 +1,20 @@
 import { Search } from "lucide-react"
 import { CourseCard } from "@/components/CourseCard"
 import { searchCourses } from "@/sanity/lib/courses/searchCourses"
+import { Metadata } from "next"
 
 interface SearchPageProps {
   params: Promise<{
     term: string
   }>
+}
+
+export const generateMetadata = (): Metadata => {
+  const title = "Haku"
+
+  return {
+    title
+  }
 }
 
 export default async function SearchPage({ params }: SearchPageProps) {

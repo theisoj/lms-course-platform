@@ -6,7 +6,7 @@ async function getCourseById(id: string) {
     defineQuery(`*[_type == "course" && _id == $id][0] {
       ...,  // Spread all course fields
       "category": category->{...},  // Expand the category reference, including all its fields
-      "instructors": instructors[]->{...},  // Expand the instructor reference, including all its fields
+      "instructors": instructors[]->{...},  // Expand the instructors reference, including all its fields
       "modules": modules[]-> {  // Expand the array of module references
         ...,  // Include all module fields
         "lessons": lessons[]-> {...}  // For each module, expand its array of lesson references

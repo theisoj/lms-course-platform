@@ -6,11 +6,61 @@ import EnrollButton from "@/components/EnrollButton"
 import getCourseBySlug from "@/sanity/lib/courses/getCourseBySlug"
 import { isEnrolledInCourse } from "@/sanity/lib/student/isEnrolledInCourse"
 import { auth } from "@clerk/nextjs/server"
+import { Metadata } from "next"
+import { redirect } from "next/navigation"
 
 interface CoursePageProps {
   params: Promise<{
     slug: string
   }>
+}
+
+type Props = {
+  params: { slug: string } & CoursePageProps["params"]
+}
+
+export const generateMetadata = async ({
+  params
+}: Props): Promise<Metadata> => {
+  const { slug } = await params
+
+  const course = await getCourseBySlug(slug)
+
+  if (!course) return redirect(`/dashboard/courses/${slug}`)
+
+  const title = `${course.title} - JM Kurssit`
+  const description = `Liity kurssille ${course.title} nyt!`
+  const url = `https://kurssit.jesunmaailma.fi/courses/${course.slug}`
+  const image = `https://kurssit.jesunmaailma.fi/api/og-image?course=${encodeURIComponent(course?.title!)}&instructors=${encodeURIComponent(
+    course?.instructors?.map((i) => i.name).join(", ")!
+  )}`
+
+  return {
+    title,
+    description,
+    icons: { icon: "https://images.jesunmaailma.fi/uploads/icons/JM_kurssit_icon_color.png", apple: "https://images.jesunmaailma.fi/uploads/icons/JM_kurssit_icon_color.png" },
+    openGraph: {
+      title,
+      description,
+      url,
+      siteName: "Kurssit",
+      images: [
+        {
+          url: image!,
+          width: 1200,
+          height: 630,
+          alt: `${course.title} - ${course.instructors && course.instructors.length > 0 ? course.instructors.map((i) => i.name).join(", ") : course.instructors?.[0]?.name}`,
+        },
+      ],
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [image!],
+    },
+  }
 }
 
 export default async function CoursePage({ params }: CoursePageProps) {

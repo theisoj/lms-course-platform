@@ -5,12 +5,68 @@ import { PortableText } from "@portabletext/react"
 import { LoomEmbed } from "@/components/LoomEmbed"
 import { VideoPlayer } from "@/components/VideoPlayer"
 import { LessonCompleteButton } from "@/components/LessonCompleteButton"
+import { Metadata } from "next"
+import getCourseById from "@/sanity/lib/courses/getCourseById"
 
 interface LessonPageProps {
   params: Promise<{
     courseId: string
     lessonId: string
   }>
+}
+
+export const generateMetadata = async ({
+  params,
+}: LessonPageProps): Promise<Metadata> => {
+  // Haetaan kurssitiedot courseId:n perusteella
+  const { courseId, lessonId } = await params
+  const course = await getCourseById(courseId)
+  const lesson = await getLessonById(lessonId)
+
+  // Jos kurssia ei löydy, ohjataan takaisin dashboardiin
+  if (!course) return redirect(`/dashboard/courses/${courseId}`)
+
+  // Haetaan oppitunti ensimmäisestä moduulista ja kurssista
+  const title = `${lesson?.title} - ${course.title}` // Otsikko päivitetään oppitunnin mukaan
+  const description = `Liity kurssille ${lesson?.title} nyt!` // Kuvaukseen lisätään oppitunnin nimi
+
+  // URL ja Open Graph -kuva
+  const url = `https://kurssit.jesunmaailma.fi/courses/${course.slug}`
+  const image = `https://kurssit.jesunmaailma.fi/api/og-image?course=${encodeURIComponent(lesson?.title!)}&instructors=${encodeURIComponent(
+    course.instructors?.map((i) => i.name).join(", ")!
+  )}`
+
+  // Metadata palautetaan
+  return {
+    title,
+    description,
+    icons: {
+      icon: "https://images.jesunmaailma.fi/uploads/icons/JM_kurssit_icon_color.png",
+      apple:
+        "https://images.jesunmaailma.fi/uploads/icons/JM_kurssit_icon_color.png",
+    },
+    openGraph: {
+      title,
+      description,
+      url,
+      siteName: "Kurssit",
+      images: [
+        {
+          url: image,
+          width: 1200,
+          height: 630,
+          alt: `${course.title} - ${course?.instructors?.length! > 0 ? course.instructors?.map((i) => i.name).join(", ") : course.instructors?.[0]?.name}`,
+        },
+      ],
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [image],
+    },
+  }
 }
 
 export default async function LessonPage({ params }: LessonPageProps) {

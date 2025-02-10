@@ -1,9 +1,19 @@
 import Hero from "@/components/Hero";
 import { CourseCard } from "@/components/CourseCard";
 import { getCourses } from "@/sanity/lib/courses/getCourses";
+import { Metadata } from "next";
 
 export const dynamic = "force-static";
 export const revalidate = 3600; // revalidate at most every hour
+
+export const generateMetadata = (): Metadata => {
+  const title = "Etusivu"
+
+  return {
+    title,
+    icons: { icon: "https://images.jesunmaailma.fi/uploads/icons/JM_kurssit_icon_color.png", apple: "https://images.jesunmaailma.fi/uploads/icons/JM_kurssit_icon_color.png" }
+  }
+}
 
 export default async function Home() {
   const courses = await getCourses();
